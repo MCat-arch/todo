@@ -5,11 +5,11 @@ class SnackbarWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: ElevatedButton(
-        onPressed: () {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
+    return Scaffold(
+      body: Center(
+        child: TextButton(
+          onPressed: () {
+            final snackbar = SnackBar(
               content: Text('Snackbar clicked yeayy'),
               action: SnackBarAction(
                 label: 'clicked',
@@ -17,10 +17,16 @@ class SnackbarWidget extends StatelessWidget {
                   print('SnackbarClicked');
                 },
               ),
+            );
+            ScaffoldMessenger.of(context).showSnackBar(snackbar);
+          },
+          child: Text('ShowSnackbar'),
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all<Color>(
+              const Color.fromARGB(255, 255, 255, 255),
             ),
-          );
-        },
-        child: Text('ShowSnackbar'),
+          ),
+        ),
       ),
     );
   }

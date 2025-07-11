@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:to_do_app/components/Completed.dart';
 import 'package:to_do_app/components/Todo.dart';
-import 'package:to_do_app/service/ThemeProvider.dart';
+import 'package:to_do_app/providers/ThemeProvider.dart';
 import 'package:to_do_app/components/InputForm.dart';
 import 'package:provider/provider.dart';
 import 'package:to_do_app/providers/TodoProvider.dart';
@@ -58,34 +58,37 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFFAF5EC),
-      appBar: AppBar(
-        // backgroundColor: Colors.black,
-        toolbarHeight: 100,
-        title: Container(
-          padding: EdgeInsets.symmetric(horizontal: 20),
-          alignment: Alignment.center,
-          child: RichText(
-            text: TextSpan(
-              text: 'Todo',
-              style: TextStyle(
-                fontSize: 42,
-                color: const Color.fromARGB(255, 0, 0, 0),
-                fontWeight: FontWeight.w700,
-              ),
-              children: const <TextSpan>[
-                TextSpan(
-                  text: 'List',
-                  style: TextStyle(
-                    fontSize: 42,
-                    color: Colors.blueAccent,
-                    fontWeight: FontWeight.w700,
+      appBar:
+          _selectedIndex == 0
+              ? AppBar(
+                // backgroundColor: Colors.black,
+                toolbarHeight: 100,
+                title: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  alignment: Alignment.center,
+                  child: RichText(
+                    text: TextSpan(
+                      text: 'Todo',
+                      style: TextStyle(
+                        fontSize: 42,
+                        color: const Color.fromARGB(255, 0, 0, 0),
+                        fontWeight: FontWeight.w700,
+                      ),
+                      children: const <TextSpan>[
+                        TextSpan(
+                          text: 'List',
+                          style: TextStyle(
+                            fontSize: 42,
+                            color: Colors.blueAccent,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ],
-            ),
-          ),
-        ),
-      ),
+              )
+              : null,
       body: widgetOptions.elementAt(_selectedIndex),
       bottomNavigationBar: BottomNavigationBar(
         showSelectedLabels: true,
@@ -100,18 +103,21 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
         currentIndex: _selectedIndex,
         onTap: onTimeTapped,
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // ScaffoldMessenger.of(
-          //   context,
-          // ).showSnackBar(SnackBar(content: Text('Floating Button Clicked')));
-          context.push('/InputForm');
-          // Navigator.push(context, InputForm());
-        },
-        backgroundColor: Colors.blueAccent,
-        // shape: ShapeBorder.lerp(a, b, t),
-        child: Icon(Icons.add, color: Colors.white),
-      ),
+      floatingActionButton:
+          _selectedIndex == 0
+              ? FloatingActionButton(
+                onPressed: () {
+                  // ScaffoldMessenger.of(
+                  //   context,
+                  // ).showSnackBar(SnackBar(content: Text('Floating Button Clicked')));
+                  context.push('/InputForm');
+                  // Navigator.push(context, InputForm());
+                },
+                backgroundColor: Colors.blueAccent,
+                // shape: ShapeBorder.lerp(a, b, t),
+                child: Icon(Icons.add, color: Colors.white),
+              )
+              : null,
     );
   }
 }

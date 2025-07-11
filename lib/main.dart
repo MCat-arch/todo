@@ -5,9 +5,10 @@ import 'package:to_do_app/components/InputForm.dart';
 import 'package:to_do_app/pages/edit_todo.dart';
 import 'package:to_do_app/pages/login.dart';
 import 'package:to_do_app/providers/TodoProvider.dart';
-import 'package:to_do_app/service/ThemeProvider.dart';
+import 'package:to_do_app/providers/notification_provider.dart';
+import 'package:to_do_app/providers/ThemeProvider.dart';
 import 'package:to_do_app/providers/user_provider.dart';
-import 'package:to_do_app/service/notification_todo.dart';
+
 import 'pages/Home.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -46,6 +47,7 @@ class HomePage extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
         ChangeNotifierProvider(create: (_) => TodoProvider()),
         ChangeNotifierProvider(create: (_) => UserProvider()),
+        ChangeNotifierProvider(create: (_) => NotificationSettingProvider()),
       ],
       child: Consumer<ThemeProvider>(
         builder: (context, value, _) {

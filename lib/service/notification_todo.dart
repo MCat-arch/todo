@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
@@ -51,25 +53,33 @@ class NotifyHelper {
     );
   }
 
-  displayNotification({required String title, required String body}) async {
-    print('doing test');
-    var androidPlatformChannelSpecifics = const AndroidNotificationDetails(
-      'your channel id',
-      'your channel name',
-      channelDescription: 'your channel description',
+  displayNotification({
+    required String title,
+    required String body,
+    bool playSound = true,
+    bool vibration = true,
+  }) async {
+    var androidDetails = AndroidNotificationDetails(
+      'your_channel_id',
+      'your_channel_name',
+      channelDescription: 'your_channel_description',
       importance: Importance.max,
       priority: Priority.high,
+      playSound: playSound,
+      enableVibration: vibration,
+      vibrationPattern:
+          vibration ? Int64List.fromList([0, 500, 500, 1000]) : null,
     );
-    var iOSPlatformChannelSpecifics = const DarwinNotificationDetails();
-    var platformChannelSpecifics = NotificationDetails(
-      android: androidPlatformChannelSpecifics,
-      iOS: iOSPlatformChannelSpecifics,
-    );
+
+    var iosDetails = DarwinNotificationDetails(presentSound: playSound);
+
+    var details = NotificationDetails(android: androidDetails, iOS: iosDetails);
+
     await flutterLocalNotificationsPlugin.show(
       0,
       title,
       body,
-      platformChannelSpecifics,
+      details,
       payload: 'Default_Sound',
     );
   }
@@ -84,12 +94,17 @@ class NotifyHelper {
     print('Notification is canceled');
   }
 
-  scheduledNotification(int hour, int minutes, TodoData task) async {
+  Future<void> scheduledNotification(
+    int hour,
+    int minutes,
+    TodoData task, {
+    bool playSound = true,
+    bool vibration = true,
+  }) async {
     await flutterLocalNotificationsPlugin.zonedSchedule(
       task.id.hashCode,
       task.title,
       task.note,
-      //tz.TZDateTime.now(tz.local).add(const Duration(seconds: 5)),
       _nextInstanceOfTenAM(
         hour,
         minutes,
@@ -97,14 +112,20 @@ class NotifyHelper {
         task.repeat!,
         task.date!,
       ),
-      const NotificationDetails(
+      NotificationDetails(
         android: AndroidNotificationDetails(
-          'your channel id',
-          'your channel name',
-          channelDescription: 'your channel description',
+          'your_channel_id',
+          'your_channel_name',
+          channelDescription: 'your_channel_description',
+          importance: Importance.max,
+          priority: Priority.high,
+          playSound: playSound,
+          enableVibration: vibration,
+          vibrationPattern:
+              vibration ? Int64List.fromList([0, 500, 500, 1000]) : null,
         ),
+        iOS: DarwinNotificationDetails(presentSound: playSound),
       ),
-      // ignore: deprecated_member_use
       androidAllowWhileIdle: true,
       uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime,

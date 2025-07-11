@@ -5,6 +5,8 @@ import 'package:to_do_app/main.dart';
 import 'package:to_do_app/model/data.dart';
 import 'package:to_do_app/pages/Home.dart';
 import 'package:to_do_app/providers/TodoProvider.dart';
+import 'package:to_do_app/providers/notification_provider.dart';
+import 'package:to_do_app/service/notification_todo.dart';
 import 'package:uuid/uuid.dart';
 import 'package:provider/provider.dart';
 
@@ -51,7 +53,7 @@ class _InputformState extends State<Inputform> {
     }
   }
 
-  void onAdd() {
+  void onAdd() async {
     TodoData newData = TodoData(
       id: uuid.v4(),
       isCompleted: isCompleted,
@@ -72,7 +74,22 @@ class _InputformState extends State<Inputform> {
     );
 
     Provider.of<TodoProvider>(context, listen: false).addTodo(newData);
+
+    final notifSetting = Provider.of<NotificationSettingProvider>(
+      context,
+      listen: false,
+    );
+
+    await NotifyHelper().scheduledNotification(
+      _startTime!.hour,
+      _startTime!.minute,
+      newData,
+      playSound: notifSetting.sound,
+      vibration: notifSetting.vibration,
+    );
+
     Navigator.of(context).pop(true);
+    // context.pop(true);
   }
 
   @override

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+import 'package:to_do_app/providers/user_provider.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -24,6 +26,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(context);
     return Scaffold(
       body: SafeArea(
         child: Center(
@@ -52,6 +55,7 @@ class _LoginPageState extends State<LoginPage> {
                     },
                     onSaved: (value) {
                       _username = value!;
+                      userProvider.setUsername(_username);
                     },
                   ),
                   SizedBox(height: 20),
